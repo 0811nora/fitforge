@@ -9,7 +9,11 @@ import CheckOption from "../components/form/checkOption";
 const Preference = () => {
   const formOptions = FORM_SECTIONS;
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const onSubmit = (data) => {
     console.log(data);
   };
@@ -32,8 +36,8 @@ const Preference = () => {
             <img src="bg-style/blue.svg" className="w-250 -rotate-5 object-cover" alt="" />
           </div>
 
-          <div className="relative mx-auto flex h-150 max-w-2xl flex-col items-center justify-center">
-            <h1 className="mt-24 mb-3 text-3xl font-black text-fantasy-800 md:mb-6 md:text-5xl">
+          <div className="relative mx-auto flex h-120 max-w-2xl flex-col items-center justify-center">
+            <h1 className="mt-18 mb-3 text-3xl font-black text-fantasy-800 md:mb-6 md:text-5xl">
               建立屬於你的訓練計畫
             </h1>
             <p className="text-md mb-6 font-medium text-santa-fe-600 md:text-xl">
@@ -64,8 +68,10 @@ const Preference = () => {
                         <span className="text-xl font-semibold text-fantasy-800">{section.title}</span>
                       </h3>
                     </div>
-                    <div className="p-6 md:p-8">
-                      {section.type === "input-group" && <InputGroup register={register} data={section} />}
+                    <div className="p-4 md:p-7">
+                      {section.type === "input-group" && (
+                        <InputGroup register={register} data={section} errors={errors} />
+                      )}
                       {(section.type === "card-radio" || section.type === "card-checkbox") && (
                         <CardOption data={section} register={register} />
                       )}
