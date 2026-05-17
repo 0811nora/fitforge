@@ -12,9 +12,9 @@ export const FORM_SECTIONS = [
         type: "radio",
         icon: "form-icon/sex.svg",
         options: [
-          { label: "男", value: "male" },
-          { label: "女", value: "female" },
-          { label: "不指定", value: "other" },
+          { label: "男", value: "男性" },
+          { label: "女", value: "女性" },
+          { label: "不指定", value: "不指定" },
         ],
       },
       { id: "age", label: "年齡", type: "number", icon: "form-icon/calendar.svg", placeholder: "" },

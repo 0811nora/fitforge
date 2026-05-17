@@ -4,8 +4,8 @@ const InputGroup = ({ register, data, errors }) => {
       {data.fields.map(
         (field) =>
           field.type === "radio" && (
-            <div className="mb-6">
-              <div className="flex flex-col gap-6 md:flex-row md:items-center" key={field.id}>
+            <div className="mb-6" key={field.id}>
+              <div className="flex flex-col gap-6 md:flex-row md:items-center">
                 <h4 className="flex items-center gap-2 font-semibold">
                   <img src={field.icon} alt="" />
                   {field.label}
@@ -39,8 +39,8 @@ const InputGroup = ({ register, data, errors }) => {
         {data.fields.map(
           (field) =>
             field.type === "number" && (
-              <div>
-                <div className="mb-1 flex items-center gap-4" key={field.id}>
+              <div key={field.id}>
+                <div className="mb-1 flex items-center gap-4">
                   <label htmlFor={field.id} className="block w-24 font-bold">
                     <div className="flex items-center gap-2 text-nowrap">
                       <img src={field.icon} className="w-6" alt="" />

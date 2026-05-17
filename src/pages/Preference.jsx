@@ -1,21 +1,89 @@
-import Button from "../components/Button";
 import { useForm } from "react-hook-form";
 import { FORM_SECTIONS } from "../data/formConfig";
+import { useEffect, useState } from "react";
+import Button from "../components/Button";
 import InputGroup from "../components/form/InputGroup";
 import CardOption from "../components/form/CardOption";
 import BadgeOption from "../components/form/BadgeOption";
 import CheckOption from "../components/form/checkOption";
+import { generateContent } from "../api/gemini";
 
 const Preference = () => {
   const formOptions = FORM_SECTIONS;
+  const [userProfile, setUserProfile] = useState();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
     console.log(data);
+    setUserProfile(data);
+
+    const prompt = handleSetPromt(data);
+
+    console.log("給AI", prompt);
+
+    postGemini(prompt);
+  };
+
+  useEffect(() => {
+    console.log("使用者資料:", userProfile);
+  }, [userProfile]);
+
+  const handleSetPromt = (data) => {
+    return `你是一位專業健身教練。
+    請根據以下使用者資料，生成一份完整的七天重訓課表。
+
+    【使用者資料】
+    - 性別：${data.gender}
+    - 年齡：${data.age}
+    - 身高：${data.height}cm
+    - 體重：${data.weight}kg
+    - 訓練目標：${data.goal}
+    - 訓練程度：${data.level}
+    - 每週訓練天數：${data.daysPerWeek}
+    - 單次訓練時長：${data.duration}
+    - 可用器材：${data.equipment}
+    - 偏好風格：${data.preferences.map((item) => item)}
+    - 身體限制：${data.limitations.map((item) => item)}
+
+    【規則】
+    1. 共安排 7 天，訓練天數共 ${data.daysPerWeek} 天，其餘為休息日
+    2. 避開與身體限制相關的動作
+    3. 只回傳 JSON，不要加任何說明文字，不要用 \`\`\` 包住
+
+    【回傳格式】
+    {
+      "week": [
+        {
+          "day": 1,
+          "dayLabel": "星期一",
+          "isRest": false,
+          "focus": "訓練部位",
+          "exercises": [
+            {
+              "name": "動作名稱",
+              "sets": 4,
+              "reps": "10-12",
+              "rest": "90秒",
+              "note": "注意事項"
+            }
+          ]
+        }
+      ]
+    }`;
+  };
+
+  const postGemini = async (data) => {
+    try {
+      const res = await generateContent(data);
+      console.log("Gemini Api 回傳", res);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
